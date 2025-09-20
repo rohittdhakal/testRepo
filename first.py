@@ -4,8 +4,8 @@ import subprocess
 import datetime
 
 # CONFIGURATION
-APP_NAME = "test"
-DEPLOY_DIR = r"C:\intern\test"
+APP_NAME = "app"
+DEPLOY_DIR = r"C:\intern\test\app"
 BACKUP_DIR = r"C:\intern\test\backup"
 GIT_REPO = r"https://github.com/rohittdhakal/testRepo.git"
 PYTHON_ENV = r"C:\deploy-demo\venv\Scripts\python.exe"
