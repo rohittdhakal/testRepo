@@ -13,30 +13,30 @@ PYTHON_ENV = r"C:\deploy-demo\venv\Scripts\python.exe"
 REQUIREMENTS_FILE = "requirements.txt"
 
 
-def remove_readonly(func, path, excinfo):
-    """Handle read-only files on Windows during rmtree."""
+def remove(func, path, excinfo):
+    
     os.chmod(path, stat.S_IWRITE)
     func(path)
 
-def backup_existing():
-    """Backup current deployment with timestamp."""
+def backup():
+    
     if os.path.exists(DEPLOY_DIR):
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         backup_path = os.path.join(BACKUP_DIR, f"{APP_NAME}_{timestamp}")
         shutil.copytree(DEPLOY_DIR, backup_path, dirs_exist_ok=True)
         print(f"[+] Backup created at {backup_path}")
 
-def deploy_code():
-    """Deploy new code from GitHub repo."""
+def deploy():
+    
     if os.path.exists(DEPLOY_DIR):
-        shutil.rmtree(DEPLOY_DIR, onerror=remove_readonly)
+        shutil.rmtree(DEPLOY_DIR, onerror=remove)
         print("[*] Old deployment removed.")
 
     subprocess.check_call(["git", "clone", GIT_REPO, DEPLOY_DIR])
     print("[+] New code cloned.")
 
-def install_dependencies():
-    """Install Python dependencies."""
+def dependencies():
+    
     req_path = os.path.join(DEPLOY_DIR, REQUIREMENTS_FILE)
     if os.path.exists(req_path):
         subprocess.check_call([PYTHON_ENV, "-m", "pip", "install", "-r", req_path])
@@ -45,7 +45,7 @@ def install_dependencies():
         print("[!] No requirements.txt found, skipping dependencies.")
 
 def restart_app():
-    """Restart app (example with Flask)."""
+    
     
     os.system("taskkill /F /IM python.exe /T")
 
@@ -56,8 +56,8 @@ def restart_app():
 
 if __name__ == "__main__":
     print("=== Starting Deployment ===")
-    backup_existing()
-    deploy_code()
-    install_dependencies()
+    backup()
+    deploy()
+    dependencies()
     restart_app()
     print("=== Deployment Completed ===")
