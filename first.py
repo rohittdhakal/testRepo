@@ -4,7 +4,7 @@ import subprocess
 import datetime
 import stat
 
-# ---------------- CONFIGURATION ----------------
+
 APP_NAME = "app"
 DEPLOY_DIR = r"C:\intern\test\app"
 BACKUP_DIR = r"C:\intern\test\backup"
@@ -12,13 +12,12 @@ GIT_REPO = r"https://github.com/rohittdhakal/testRepo.git"
 PYTHON_ENV = r"C:\deploy-demo\venv\Scripts\python.exe"
 REQUIREMENTS_FILE = "requirements.txt"
 
-# ---------------- HELPER ----------------
+
 def remove_readonly(func, path, excinfo):
     """Handle read-only files on Windows during rmtree."""
     os.chmod(path, stat.S_IWRITE)
     func(path)
 
-# ---------------- DEPLOYMENT STEPS ----------------
 def backup_existing():
     """Backup current deployment with timestamp."""
     if os.path.exists(DEPLOY_DIR):
@@ -47,14 +46,14 @@ def install_dependencies():
 
 def restart_app():
     """Restart app (example with Flask)."""
-    # Kill old process (if running on port 5000)
+    
     os.system("taskkill /F /IM python.exe /T")
 
-    # Start new process
+   
     subprocess.Popen([PYTHON_ENV, "app.py"], cwd=DEPLOY_DIR)
     print("[+] App restarted successfully.")
 
-# ---------------- MAIN ----------------
+
 if __name__ == "__main__":
     print("=== Starting Deployment ===")
     backup_existing()
