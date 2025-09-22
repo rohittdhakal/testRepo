@@ -28,29 +28,29 @@ def create_backup():
         
        
         shutil.copytree(deploy_directory, backup_location, dirs_exist_ok=True)
-        print(f"[+] backup created: {backup_location}")
+        print(f" backup created: {backup_location}")
     else:
-        print("[!] cannot create ")
+        print(" cannot create ")
 
 def deploy_new_code():
     
     
     if os.path.exists(deploy_directory):
-        print("[*] previous deployment removing")
+        print(" previous deployment removing")
         shutil.rmtree(deploy_directory, onerror=handle_readonly_files)
-        print("[*] previous deployment removed.")
+        print(" previous deployment removed.")
 
    
-    print(f"[*] {git_repository}...")
+    print(f"{git_repository}...")
     subprocess.check_call(["git", "clone", git_repository, deploy_directory])
-    print("[+] sucessful")
+    print(" sucessful")
 
 def install_dependencies():
     
     requirements_path = os.path.join(deploy_directory, requirements_file)
     
     if os.path.exists(requirements_path):
-        print("[*] ")
+        
         subprocess.check_call([
             python_executable, 
             "-m", 
@@ -59,24 +59,24 @@ def install_dependencies():
             "-r", 
             requirements_path
         ])
-        print("[+] successfully.")
+        print(" successfully.")
     else:
-        print("[!] skiping")
+        print(" skiping")
 
 def restart_application():
  
     
 
-    print("[*] halt existing process")
+    print(" halt existing process")
     os.system("taskkill /F /IM python.exe /T")
     
   
-    print("[*] start")
+    print("start")
     app_script = os.path.join(deploy_directory, "app.py")
     
   
     subprocess.Popen([python_executable, "app.py"], cwd=deploy_directory)
-    print("[+] app restarted successfully.")
+    print(" app restarted successfully.")
 
 
 if __name__ == "__main__":
@@ -86,18 +86,18 @@ if __name__ == "__main__":
     
     try:
         
-        print("\n1. creating backup")
+        print(" creating backup")
         create_backup()
         
         
-        print("\n2. deploying newcode")
+        print(" deploying newcode")
         deploy_new_code()
         
       
-        print("\n3. installig")
+        print(" installig")
         install_dependencies()
         
-        print("\n4. restarting")
+        print(" restarting")
         restart_application()
         
         print("\n" + "=" * 30)
